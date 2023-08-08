@@ -1,27 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>My GitHub Repos</title>
+  <title>GitHub Repositories</title>
 </head>
 <body>
-  <h1>My GitHub Repositories</h1>
+  <h1>GitHub Repositories</h1>
+  <input type="text" id="username" placeholder="Enter GitHub username">
+  <button id="fetch-button">Fetch Repos</button>
   <ul id="repos-list"></ul>
 
   <script>
-    const username = "insert username here";
-    const apiUrl = `https://api.github.com/users/${username}/repos`;
+    const fetchButton = document.getElementById("fetch-button");
+    fetchButton.addEventListener("click", fetchRepositories);
 
-    fetch(apiUrl)
-      .then(response => response.json())
-      .then(repos => {
-        const reposList = document.getElementById("repos-list");
-        repos.forEach(repo => {
-          const repoItem = document.createElement("li");
-          repoItem.innerHTML = `<a href="${repo.html_url}" target="_blank">${repo.name}</a>`;
-          reposList.appendChild(repoItem);
-        });
-      })
-      .catch(error => console.error("Error fetching repositories:", error));
+    function fetchRepositories() {
+      const usernameInput = document.getElementById("username");
+      const username = usernameInput.value.trim();
+
+      if (username === "") {
+        alert("Please enter a valid GitHub username.");
+        return;
+      }
+
+      const apiUrl = `https://api.github.com/users/${username}/repos`;
+
+      fetch(apiUrl)
+        .then(response => response.json())
+        .then(repos => {
+          const reposList = document.getElementById("repos-list");
+          reposList.innerHTML = ""; // Clear existing list
+
+          repos.forEach(repo => {
+            const repoItem = document.createElement("li");
+            repoItem.innerHTML = `<a href="${repo.html_url}" target="_blank">${repo.name}</a>`;
+            reposList.appendChild(repoItem);
+          });
+        })
+        .catch(error => console.error("Error fetching repositories:", error));
+    }
   </script>
 </body>
 </html>
