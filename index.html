@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My GitHub Repos</title>
+</head>
+<body>
+  <h1>My GitHub Repositories</h1>
+  <ul id="repos-list"></ul>
+
+  <script>
+    const username = "insert username here";
+    const apiUrl = `https://api.github.com/users/${username}/repos`;
+
+    fetch(apiUrl)
+      .then(response => response.json())
+      .then(repos => {
+        const reposList = document.getElementById("repos-list");
+        repos.forEach(repo => {
+          const repoItem = document.createElement("li");
+          repoItem.innerHTML = `<a href="${repo.html_url}" target="_blank">${repo.name}</a>`;
+          reposList.appendChild(repoItem);
+        });
+      })
+      .catch(error => console.error("Error fetching repositories:", error));
+  </script>
+</body>
+</html>
